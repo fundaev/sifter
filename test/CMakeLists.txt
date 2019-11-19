@@ -25,7 +25,7 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
 endif()
 
 
-add_executable(${PROJECT_NAME} sifter_test.cpp)
+add_executable(${PROJECT_NAME} condition_test.cpp node_test.cpp)
 target_link_libraries(${PROJECT_NAME} gtest gtest_main)
 
 include(CTest)

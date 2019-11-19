@@ -21,7 +21,7 @@
  */
 
 #include <gtest/gtest.h>
-#include "sifter/filter.hpp"
+#include <sifter/filter.hpp>
 
 TEST(condition, constructor)
 {
