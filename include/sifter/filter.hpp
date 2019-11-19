@@ -23,342 +23,119 @@
 #ifndef SIFTER_FILTER_HPP
 #define SIFTER_FILTER_HPP
 
-#include <variant>
-#include <memory>
+#include "basic_filter.hpp"
 
 namespace sifter
 {
 
+enum comparision
+{
+    eq,
+    ne,
+    lt,
+    le,
+    gt,
+    ge,
+    like
+};
+
 template <typename... Types>
-class condition
+class condition : public basic_condition<comparision, eq, Types...>
 {
 public:
-    using value_type = std::variant<Types...>;
-
-    enum comparision
-    {
-        eq,
-        ne,
-        lt,
-        le,
-        gt,
-        ge,
-        like
-    };
+    using value_type = typename basic_condition<comparision, eq, Types...>::value_type;
+    using condition_type = condition<Types...>;
 
 public:
     explicit condition(const value_type &lhs = value_type(), const value_type &rhs = value_type(), comparision c = eq)
-        : m_lhs(lhs),
-          m_rhs(rhs),
-          m_operator(c)
-    {
-    }
-    condition(const condition &c)
-        : m_lhs(c.m_lhs),
-          m_rhs(c.m_rhs),
-          m_operator(c.m_operator)
-    {
-    }
-    condition(condition &&c) noexcept
-        : m_lhs(std::move(c.m_lhs)),
-          m_rhs(std::move(c.m_rhs)),
-          m_operator(c.m_operator)
+        : basic_condition<comparision, eq, Types...>(lhs, rhs, c)
     {
     }
 
-    const value_type& lhs() const
+    condition(const condition_type &c)
+        : basic_condition<comparision, eq, Types...>(c)
     {
-        return m_lhs;
     }
 
-    value_type& lhs()
+    condition(condition_type &&c) noexcept
+        : basic_condition<comparision, eq, Types...>(c)
     {
-        return m_lhs;
     }
 
-    const value_type& rhs() const
+    condition_type& operator==(const value_type &rhs)
     {
-        return m_rhs;
-    }
-
-    value_type& rhs()
-    {
-        return m_rhs;
-    }
-
-    const comparision& comp() const
-    {
-        return m_operator;
-    }
-
-    comparision& comp()
-    {
-        return m_operator;
-    }
-
-    condition<Types...>& operator==(const value_type &rhs)
-    {
-        m_rhs = rhs;
-        m_operator = eq;
+        condition_type::rhs() = rhs;
+        condition_type::comp() = eq;
         return *this;
     }
 
-    condition<Types...>& operator!=(const value_type &rhs)
+    condition_type& operator!=(const value_type &rhs)
     {
-        m_rhs = rhs;
-        m_operator = ne;
+        condition_type::rhs() = rhs;
+        condition_type::comp() = ne;
         return *this;
     }
 
-    condition<Types...>& operator<(const value_type &rhs)
+    condition_type& operator<(const value_type &rhs)
     {
-        m_rhs = rhs;
-        m_operator = lt;
+        condition_type::rhs() = rhs;
+        condition_type::comp() = lt;
         return *this;
     }
 
-    condition<Types...>& operator<=(const value_type &rhs)
+    condition_type& operator<=(const value_type &rhs)
     {
-        m_rhs = rhs;
-        m_operator = le;
+        condition_type::rhs() = rhs;
+        condition_type::comp() = le;
         return *this;
     }
 
-    condition<Types...>& operator>(const value_type &rhs)
+    condition_type& operator>(const value_type &rhs)
     {
-        m_rhs = rhs;
-        m_operator = gt;
+        condition_type::rhs() = rhs;
+        condition_type::comp() = gt;
         return *this;
     }
 
-    condition<Types...>& operator>=(const value_type &rhs)
+    condition_type& operator>=(const value_type &rhs)
     {
-        m_rhs = rhs;
-        m_operator = ge;
+        condition_type::rhs() = rhs;
+        condition_type::comp() = ge;
         return *this;
     }
 
-    condition<Types...>& operator%(const value_type &rhs)
+    condition_type& operator%(const value_type &rhs)
     {
-        m_rhs = rhs;
-        m_operator = like;
+        condition_type::rhs() = rhs;
+        condition_type::comp() = like;
         return *this;
     }
 
-    bool operator==(const condition<Types...> &c)
+    bool operator==(const condition_type &c) const
     {
-        return (m_lhs == c.m_lhs && m_rhs == c.m_rhs && m_operator == c.m_operator);
+        return (condition_type::lhs() == c.lhs() && condition_type::rhs() == c.rhs() &&
+                condition_type::comp() == c.comp());
     }
 
-    bool operator!=(const condition<Types...> &c)
+    bool operator!=(const condition_type &c) const
     {
-        return (m_lhs != c.m_lhs || m_rhs != c.m_rhs || m_operator != c.m_operator);
+        return (condition_type::lhs() != c.lhs() || condition_type::rhs() != c.rhs() ||
+                condition_type::comp() != c.comp());
     }
 
-    condition<Types...>& operator=(const condition<Types...> &c)
+    condition_type& operator=(const condition_type &c)
     {
-        m_lhs = c.m_lhs;
-        m_rhs = c.m_rhs;
-        m_operator = c.m_operator;
+        condition_type::lhs() = c.lhs();
+        condition_type::rhs() = c.rhs();
+        condition_type::comp() = c.comp();
         return *this;
     }
-
-private:
-    value_type m_lhs;
-    value_type m_rhs;
-    comparision m_operator = eq;
 };
-
-template <typename... Types>
-struct node;
-
-template <typename... Types>
-class filter
-{
-public:
-    using condition_type = condition<Types...>;
-    using filter_type = filter<Types...>;
-    using node_type = node<Types...>;
-
-    enum operation
-    {
-        _none,
-        _and,
-        _or
-    };
-
-public:
-    filter() = default;
-    filter(const filter_type &f)
-        : m_lhs(f.m_lhs),
-          m_rhs(f.m_rhs),
-          m_operator(f.m_operator)
-    {
-    }
-    filter(filter_type &&f) noexcept
-        : m_lhs(std::move(f.m_lhs)),
-          m_rhs(std::move(f.m_rhs)),
-          m_operator(f.m_operator)
-    {
-    }
-    explicit filter(const condition_type &c)
-        : m_lhs(c)
-    {
-    }
-    explicit filter(condition_type &&c)
-        : m_lhs(c)
-    {
-    }
-
-    filter_type& operator&=(const condition_type &rhs)
-    {
-        if (m_operator != _none)
-            m_lhs = *this;
-
-        m_rhs = rhs;
-        m_operator = _and;
-    }
-
-    filter_type& operator&=(const filter_type &rhs)
-    {
-        if (m_operator != _none)
-            m_lhs = *this;
-
-        m_rhs = rhs;
-        m_operator = _and;
-    }
-
-    filter_type operator&&(const condition_type &c)
-    {
-        filter_type out;
-        out.m_lhs = *this;
-        out.m_rhs = c;
-        out.m_operator = _and;
-        return out;
-    }
-
-    filter_type operator&&(const filter_type &f)
-    {
-        filter_type out;
-        out.m_lhs = *this;
-        out.m_rhs = f;
-        out.m_operator = _and;
-        return out;
-    }
-
-    filter_type& operator|=(const condition_type &rhs)
-    {
-        if (m_operator != _none)
-            m_lhs = *this;
-
-        m_rhs = rhs;
-        m_operator = _or;
-    }
-
-    filter_type& operator|=(const filter_type &rhs)
-    {
-        if (m_operator != _none)
-            m_lhs = *this;
-
-        m_rhs = rhs;
-        m_operator = _or;
-    }
-
-    filter_type operator||(const condition_type &c)
-    {
-        filter_type out;
-        out.m_lhs = *this;
-        out.m_rhs = c;
-        out.m_operator = _or;
-        return out;
-    }
-
-    filter_type operator||(const filter_type &f)
-    {
-        filter_type out;
-        out.m_lhs = *this;
-        out.m_rhs = f;
-        out.m_operator = _or;
-        return out;
-    }
-
-private:
-    node_type m_lhs;
-    node_type m_rhs;
-    operation m_operator = _none;
-};
-
 
 template<typename... Types>
-struct node
-{
-    using condition_type = condition<Types...>;
-    using filter_type = filter<Types...>;
-
-    node() = default;
-
-    node(const node &n)
-        : condition(n.condition ? new condition_type(*n.condition) : nullptr),
-          filter(n.filter ? new filter_type(*n.filter) : nullptr)
-    {
-    }
-
-    node(node &&n) noexcept
-        : condition(std::move(n.condition)),
-          filter(std::move(n.filter))
-    {
-    }
-
-    explicit node(const condition_type &c)
-        : condition(new condition_type(c))
-    {
-    }
-    explicit node(const condition_type &&c)
-        : condition(new condition_type(c))
-    {
-    }
-
-    explicit node(const filter_type &f)
-        : filter(new filter_type(f))
-    {
-    }
-
-    explicit node(const filter_type &&f)
-        : filter(new filter_type(f))
-    {
-    }
-
-    node& operator=(const condition_type &c)
-    {
-        filter.reset();
-        condition.reset(new condition_type(c));
-        return *this;
-    }
-
-    node& operator=(const condition_type &&c)
-    {
-        filter.reset();
-        condition.reset(new condition_type(c));
-        return *this;
-    }
-
-    node& operator=(const filter_type &f)
-    {
-        condition.reset();
-        filter.reset(new filter_type(f));
-        return *this;
-    }
-
-    node& operator=(const filter_type &&f)
-    {
-        condition.reset();
-        filter.reset(new filter_type(f));
-        return *this;
-    }
-
-    std::unique_ptr<condition_type> condition;
-    std::unique_ptr<filter_type> filter;
-};
+using filter = basic_filter<comparision, eq, Types...>;
+template<typename... Types>
+using node = basic_node<comparision, eq, Types...>;
 
 }
 

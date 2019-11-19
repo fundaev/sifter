@@ -44,7 +44,7 @@ TEST(node, constructor)
     EXPECT_TRUE(*n2.condition == *n1.condition);
     EXPECT_FALSE(n2.condition == n1.condition);
 
-    n2.condition->comp() = sifter::condition<int, std::string>::lt;
+    n2.condition->comp() = sifter::lt;
     EXPECT_FALSE(*n2.condition == *n1.condition);
 
     sifter::node<int, std::string> n3(std::move(n1));
