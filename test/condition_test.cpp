@@ -8,8 +8,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -25,7 +25,8 @@
 
 TEST(basic_condition, constructor)
 {
-    using condition = sifter::basic_condition<sifter::comparison, sifter::gt, int>;
+    using condition =
+            sifter::basic_condition<sifter::comparison, sifter::gt, int>;
     auto c1 = condition();
     EXPECT_EQ(std::get<int>(c1.lhs()), 0);
     EXPECT_EQ(std::get<int>(c1.rhs()), 0);
@@ -46,7 +47,9 @@ TEST(basic_condition, constructor)
     EXPECT_EQ(std::get<int>(c4.rhs()), 4);
     EXPECT_EQ(c4.comp(), sifter::ge);
 
-    auto c5 = sifter::basic_condition<sifter::comparison, sifter::gt, int, std::string>("id", 4, sifter::like);
+    auto c5 =
+     sifter::basic_condition<sifter::comparison, sifter::gt, int, std::string>(
+             "id", 4, sifter::like);
     EXPECT_EQ(std::get<std::string>(c5.lhs()), "id");
     EXPECT_EQ(std::get<int>(c5.rhs()), 4);
     EXPECT_EQ(c5.comp(), sifter::like);
@@ -74,7 +77,8 @@ TEST(condition, constructor)
     EXPECT_EQ(std::get<int>(c4.rhs()), 4);
     EXPECT_EQ(c4.comp(), sifter::ge);
 
-    auto c5 = sifter::condition<int, std::string>("id", 4, sifter::like);
+    auto c5 =
+         sifter::condition<int, std::string>("id", 4, sifter::like);
     EXPECT_EQ(std::get<std::string>(c5.lhs()), "id");
     EXPECT_EQ(std::get<int>(c5.rhs()), 4);
     EXPECT_EQ(c5.comp(), sifter::like);

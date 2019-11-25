@@ -8,8 +8,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -25,8 +25,10 @@
 
 TEST(basic_filter, constructor)
 {
-    using basic_condition = sifter::basic_condition<sifter::comparison, sifter::eq, int, std::string>;
-    using basic_filter = sifter::basic_filter<sifter::comparison, sifter::eq, int, std::string>;
+    using basic_condition =
+      sifter::basic_condition<sifter::comparison, sifter::eq, int, std::string>;
+    using basic_filter =
+         sifter::basic_filter<sifter::comparison, sifter::eq, int, std::string>;
 
     auto c0 = basic_condition("f", 5);
     auto f0 = basic_filter(c0);
@@ -73,8 +75,10 @@ TEST(basic_filter, constructor)
 
 TEST(basic_filter, operators)
 {
-    using basic_condition = sifter::basic_condition<sifter::comparison, sifter::eq, int, std::string>;
-    using basic_filter = sifter::basic_filter<sifter::comparison, sifter::eq, int, std::string>;
+    using basic_condition =
+      sifter::basic_condition<sifter::comparison, sifter::eq, int, std::string>;
+    using basic_filter =
+         sifter::basic_filter<sifter::comparison, sifter::eq, int, std::string>;
 
     auto c0 = basic_condition("a", 3, sifter::lt);
     auto c1 = basic_condition("name", "test", sifter::like);
@@ -239,8 +243,10 @@ TEST(basic_filter, operators)
 
 TEST(basic_filter, comparison)
 {
-    using basic_condition = sifter::basic_condition<sifter::comparison, sifter::eq, int, std::string>;
-    using basic_filter = sifter::basic_filter<sifter::comparison, sifter::eq, int, std::string>;
+    using basic_condition =
+      sifter::basic_condition<sifter::comparison, sifter::eq, int, std::string>;
+    using basic_filter =
+         sifter::basic_filter<sifter::comparison, sifter::eq, int, std::string>;
 
     auto c0 = basic_condition("f", 5);
     auto f0 = basic_filter(c0);

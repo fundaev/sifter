@@ -8,8 +8,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -25,8 +25,10 @@
 
 TEST(node, constructor)
 {
-    using basic_condition = sifter::basic_condition<sifter::comparison, sifter::eq, int, std::string>;
-    using basic_node = sifter::basic_node<sifter::comparison, sifter::eq, int, std::string>;
+    using basic_condition =
+      sifter::basic_condition<sifter::comparison, sifter::eq, int, std::string>;
+    using basic_node =
+           sifter::basic_node<sifter::comparison, sifter::eq, int, std::string>;
 
     basic_node n0;
     EXPECT_FALSE(n0.condition);
@@ -75,8 +77,10 @@ TEST(node, constructor)
 
 TEST(node, comparison)
 {
-    using basic_condition = sifter::basic_condition<sifter::comparison, sifter::eq, int, std::string>;
-    using basic_node = sifter::basic_node<sifter::comparison, sifter::eq, int, std::string>;
+    using basic_condition =
+      sifter::basic_condition<sifter::comparison, sifter::eq, int, std::string>;
+    using basic_node =
+           sifter::basic_node<sifter::comparison, sifter::eq, int, std::string>;
 
     basic_condition c1("a", 5);
     basic_node n1(c1);

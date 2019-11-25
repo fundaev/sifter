@@ -8,8 +8,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -28,111 +28,113 @@
 namespace sifter
 {
 
-enum comparison
-{
-    eq,
-    ne,
-    lt,
-    le,
-    gt,
-    ge,
-    like
-};
-
-template <typename... Types>
-class condition : public basic_condition<comparison, eq, Types...>
-{
-public:
-    using value_type = typename basic_condition<comparison, eq, Types...>::value_type;
-    using basic_type = basic_condition<comparison, eq, Types...>;
-
-public:
-    explicit condition(const value_type &lhs = value_type(), const value_type &rhs = value_type(), comparison c = eq)
-        : basic_condition<comparison, eq, Types...>(lhs, rhs, c)
+    enum comparison
     {
-    }
+        eq,
+        ne,
+        lt,
+        le,
+        gt,
+        ge,
+        like
+    };
 
-    condition(const condition &c)
-        : basic_condition<comparison, eq, Types...>(c)
+    template<typename... Types>
+    class condition : public basic_condition<comparison, eq, Types...>
     {
-    }
+    public:
+        using value_type =
+                typename basic_condition<comparison, eq, Types...>::value_type;
+        using basic_type = basic_condition<comparison, eq, Types...>;
 
-    condition(condition &&c) noexcept
-        : basic_condition<comparison, eq, Types...>(c)
-    {
-    }
+    public:
+        explicit condition(const value_type &lhs = value_type(),
+                           const value_type &rhs = value_type(),
+                           comparison c = eq)
+                : basic_condition<comparison, eq, Types...>(lhs, rhs, c)
+        {
+        }
 
-    bool operator==(const condition &c) const
-    {
-        return *(static_cast<const basic_type*>(this)) == c;
-    }
+        condition(const condition &c)
+                : basic_condition<comparison, eq, Types...>(c)
+        {
+        }
 
-    bool operator!=(const condition &c) const
-    {
-        return *(static_cast<const basic_type*>(this)) != c;
-    }
+        condition(condition &&c) noexcept
+                : basic_condition<comparison, eq, Types...>(c)
+        {
+        }
 
-    condition& operator=(const condition &c)
-    {
-        *(static_cast<basic_type*>(this)) = c;
-        return *this;
-    }
+        bool operator==(const condition &c) const
+        {
+            return *(static_cast<const basic_type *>(this)) == c;
+        }
 
-    condition& operator==(const value_type &rhs)
-    {
-        condition::rhs() = rhs;
-        condition::comp() = eq;
-        return *this;
-    }
+        bool operator!=(const condition &c) const
+        {
+            return *(static_cast<const basic_type *>(this)) != c;
+        }
 
-    condition& operator!=(const value_type &rhs)
-    {
-        condition::rhs() = rhs;
-        condition::comp() = ne;
-        return *this;
-    }
+        condition &operator=(const condition &c)
+        {
+            *(static_cast<basic_type *>(this)) = c;
+            return *this;
+        }
 
-    condition& operator<(const value_type &rhs)
-    {
-        condition::rhs() = rhs;
-        condition::comp() = lt;
-        return *this;
-    }
+        condition &operator==(const value_type &rhs)
+        {
+            condition::rhs() = rhs;
+            condition::comp() = eq;
+            return *this;
+        }
 
-    condition& operator<=(const value_type &rhs)
-    {
-        condition::rhs() = rhs;
-        condition::comp() = le;
-        return *this;
-    }
+        condition &operator!=(const value_type &rhs)
+        {
+            condition::rhs() = rhs;
+            condition::comp() = ne;
+            return *this;
+        }
 
-    condition& operator>(const value_type &rhs)
-    {
-        condition::rhs() = rhs;
-        condition::comp() = gt;
-        return *this;
-    }
+        condition &operator<(const value_type &rhs)
+        {
+            condition::rhs() = rhs;
+            condition::comp() = lt;
+            return *this;
+        }
 
-    condition& operator>=(const value_type &rhs)
-    {
-        condition::rhs() = rhs;
-        condition::comp() = ge;
-        return *this;
-    }
+        condition &operator<=(const value_type &rhs)
+        {
+            condition::rhs() = rhs;
+            condition::comp() = le;
+            return *this;
+        }
 
-    condition& operator%(const value_type &rhs)
-    {
-        condition::rhs() = rhs;
-        condition::comp() = like;
-        return *this;
-    }
-};
+        condition &operator>(const value_type &rhs)
+        {
+            condition::rhs() = rhs;
+            condition::comp() = gt;
+            return *this;
+        }
 
-template<typename... Types>
-using filter = basic_filter<comparison, eq, Types...>;
-template<typename... Types>
-using node = basic_node<comparison, eq, Types...>;
+        condition &operator>=(const value_type &rhs)
+        {
+            condition::rhs() = rhs;
+            condition::comp() = ge;
+            return *this;
+        }
 
+        condition &operator%(const value_type &rhs)
+        {
+            condition::rhs() = rhs;
+            condition::comp() = like;
+            return *this;
+        }
+    };
+
+    template<typename... Types>
+    using filter = basic_filter<comparison, eq, Types...>;
+    template<typename... Types>
+    using node = basic_node<comparison, eq, Types...>;
 }
 
 #endif //SIFTER_FILTER_HPP
