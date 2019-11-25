@@ -25,12 +25,15 @@
 
 TEST(node, constructor)
 {
-    sifter::node<int> n0;
+    using basic_condition = sifter::basic_condition<sifter::comparison, sifter::eq, int, std::string>;
+    using basic_node = sifter::basic_node<sifter::comparison, sifter::eq, int, std::string>;
+
+    basic_node n0;
     EXPECT_FALSE(n0.condition);
     EXPECT_FALSE(n0.filter);
 
-    sifter::condition<int, std::string> c1("a", 5);
-    sifter::node<int, std::string> n1(c1);
+    basic_condition c1("a", 5);
+    basic_node n1(c1);
     ASSERT_TRUE(n1.condition);
     EXPECT_FALSE(n1.filter);
     EXPECT_TRUE(*n1.condition == c1);
@@ -38,7 +41,7 @@ TEST(node, constructor)
     c1.lhs() = "c";
     EXPECT_TRUE(*n1.condition != c1);
 
-    sifter::node<int, std::string> n2(n1);
+    basic_node n2 = n1;
     EXPECT_TRUE(n2.condition);
     EXPECT_FALSE(n2.filter);
     EXPECT_TRUE(*n2.condition == *n1.condition);
@@ -47,9 +50,46 @@ TEST(node, constructor)
     n2.condition->comp() = sifter::lt;
     EXPECT_FALSE(*n2.condition == *n1.condition);
 
-    sifter::node<int, std::string> n3(std::move(n1));
+    basic_node n3 = std::move(n1);
     EXPECT_TRUE(n3.condition);
     EXPECT_FALSE(n3.filter);
     EXPECT_FALSE(n1.condition);
     EXPECT_FALSE(n1.filter);
+
+    basic_node n4;
+    n4 = std::move(n3);
+    EXPECT_TRUE(n4.condition);
+    EXPECT_FALSE(n4.filter);
+    EXPECT_FALSE(n3.condition);
+    EXPECT_FALSE(n3.filter);
+
+    basic_node n5;
+    n5 = n4;
+    EXPECT_TRUE(n5.condition);
+    EXPECT_FALSE(n4.filter);
+    EXPECT_TRUE(n4.condition);
+    EXPECT_FALSE(n4.filter);
+    EXPECT_EQ(*n5.condition, *n4.condition);
+    EXPECT_NE(n5.condition, n4.condition);
+}
+
+TEST(node, comparison)
+{
+    using basic_condition = sifter::basic_condition<sifter::comparison, sifter::eq, int, std::string>;
+    using basic_node = sifter::basic_node<sifter::comparison, sifter::eq, int, std::string>;
+
+    basic_condition c1("a", 5);
+    basic_node n1(c1);
+    basic_node n2(c1);
+
+    EXPECT_TRUE(n1 == n2);
+    EXPECT_FALSE(n1 != n2);
+
+    n2.condition->comp() = sifter::lt;
+    EXPECT_FALSE(n1 == n2);
+    EXPECT_TRUE(n1 != n2);
+
+    basic_node n3;
+    EXPECT_FALSE(n1 == n3);
+    EXPECT_TRUE(n1 != n3);
 }

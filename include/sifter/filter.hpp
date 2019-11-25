@@ -28,7 +28,7 @@
 namespace sifter
 {
 
-enum comparision
+enum comparison
 {
     eq,
     ne,
@@ -40,102 +40,98 @@ enum comparision
 };
 
 template <typename... Types>
-class condition : public basic_condition<comparision, eq, Types...>
+class condition : public basic_condition<comparison, eq, Types...>
 {
 public:
-    using value_type = typename basic_condition<comparision, eq, Types...>::value_type;
-    using condition_type = condition<Types...>;
+    using value_type = typename basic_condition<comparison, eq, Types...>::value_type;
+    using basic_type = basic_condition<comparison, eq, Types...>;
 
 public:
-    explicit condition(const value_type &lhs = value_type(), const value_type &rhs = value_type(), comparision c = eq)
-        : basic_condition<comparision, eq, Types...>(lhs, rhs, c)
+    explicit condition(const value_type &lhs = value_type(), const value_type &rhs = value_type(), comparison c = eq)
+        : basic_condition<comparison, eq, Types...>(lhs, rhs, c)
     {
     }
 
-    condition(const condition_type &c)
-        : basic_condition<comparision, eq, Types...>(c)
+    condition(const condition &c)
+        : basic_condition<comparison, eq, Types...>(c)
     {
     }
 
-    condition(condition_type &&c) noexcept
-        : basic_condition<comparision, eq, Types...>(c)
+    condition(condition &&c) noexcept
+        : basic_condition<comparison, eq, Types...>(c)
     {
     }
 
-    condition_type& operator==(const value_type &rhs)
+    bool operator==(const condition &c) const
     {
-        condition_type::rhs() = rhs;
-        condition_type::comp() = eq;
+        return *(static_cast<const basic_type*>(this)) == c;
+    }
+
+    bool operator!=(const condition &c) const
+    {
+        return *(static_cast<const basic_type*>(this)) != c;
+    }
+
+    condition& operator=(const condition &c)
+    {
+        *(static_cast<basic_type*>(this)) = c;
         return *this;
     }
 
-    condition_type& operator!=(const value_type &rhs)
+    condition& operator==(const value_type &rhs)
     {
-        condition_type::rhs() = rhs;
-        condition_type::comp() = ne;
+        condition::rhs() = rhs;
+        condition::comp() = eq;
         return *this;
     }
 
-    condition_type& operator<(const value_type &rhs)
+    condition& operator!=(const value_type &rhs)
     {
-        condition_type::rhs() = rhs;
-        condition_type::comp() = lt;
+        condition::rhs() = rhs;
+        condition::comp() = ne;
         return *this;
     }
 
-    condition_type& operator<=(const value_type &rhs)
+    condition& operator<(const value_type &rhs)
     {
-        condition_type::rhs() = rhs;
-        condition_type::comp() = le;
+        condition::rhs() = rhs;
+        condition::comp() = lt;
         return *this;
     }
 
-    condition_type& operator>(const value_type &rhs)
+    condition& operator<=(const value_type &rhs)
     {
-        condition_type::rhs() = rhs;
-        condition_type::comp() = gt;
+        condition::rhs() = rhs;
+        condition::comp() = le;
         return *this;
     }
 
-    condition_type& operator>=(const value_type &rhs)
+    condition& operator>(const value_type &rhs)
     {
-        condition_type::rhs() = rhs;
-        condition_type::comp() = ge;
+        condition::rhs() = rhs;
+        condition::comp() = gt;
         return *this;
     }
 
-    condition_type& operator%(const value_type &rhs)
+    condition& operator>=(const value_type &rhs)
     {
-        condition_type::rhs() = rhs;
-        condition_type::comp() = like;
+        condition::rhs() = rhs;
+        condition::comp() = ge;
         return *this;
     }
 
-    bool operator==(const condition_type &c) const
+    condition& operator%(const value_type &rhs)
     {
-        return (condition_type::lhs() == c.lhs() && condition_type::rhs() == c.rhs() &&
-                condition_type::comp() == c.comp());
-    }
-
-    bool operator!=(const condition_type &c) const
-    {
-        return (condition_type::lhs() != c.lhs() || condition_type::rhs() != c.rhs() ||
-                condition_type::comp() != c.comp());
-    }
-
-    condition_type& operator=(const condition_type &c)
-    {
-        condition_type::lhs() = c.lhs();
-        condition_type::rhs() = c.rhs();
-        condition_type::comp() = c.comp();
+        condition::rhs() = rhs;
+        condition::comp() = like;
         return *this;
     }
 };
 
 template<typename... Types>
-using filter = basic_filter<comparision, eq, Types...>;
+using filter = basic_filter<comparison, eq, Types...>;
 template<typename... Types>
-using node = basic_node<comparision, eq, Types...>;
+using node = basic_node<comparison, eq, Types...>;
 
 }
 
