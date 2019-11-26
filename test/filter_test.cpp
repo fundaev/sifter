@@ -38,7 +38,7 @@ TEST(basic_filter, constructor)
     EXPECT_FALSE(f0.right_is_condition());
     EXPECT_FALSE(f0.right_is_filter());
 
-    EXPECT_EQ(f0.oper(), basic_filter::_none);
+    EXPECT_EQ(f0.oper(), sifter::operation::_none);
     EXPECT_EQ(f0.left_condition(), c0);
 
     c0.lhs() = "g";
@@ -53,7 +53,7 @@ TEST(basic_filter, constructor)
     EXPECT_FALSE(f1.right_is_condition());
     EXPECT_FALSE(f1.right_is_filter());
 
-    EXPECT_EQ(f1.oper(), basic_filter::_none);
+    EXPECT_EQ(f1.oper(), sifter::operation::_none);
     EXPECT_EQ(f1.left_condition(), f0.left_condition());
 
     f1.left_condition().rhs() = "five";
@@ -65,7 +65,7 @@ TEST(basic_filter, constructor)
     EXPECT_FALSE(f2.right_is_condition());
     EXPECT_FALSE(f2.right_is_filter());
 
-    EXPECT_EQ(f2.oper(), basic_filter::_none);
+    EXPECT_EQ(f2.oper(), sifter::operation::_none);
 
     EXPECT_FALSE(f1.left_is_condition());
     EXPECT_FALSE(f1.left_is_filter());
@@ -91,7 +91,7 @@ TEST(basic_filter, operators)
     EXPECT_FALSE(f0.left_is_filter());
     ASSERT_TRUE(f0.right_is_condition());
     EXPECT_FALSE(f0.right_is_filter());
-    EXPECT_EQ(f0.oper(), basic_filter::_and);
+    EXPECT_EQ(f0.oper(), sifter::operation::_and);
     EXPECT_EQ(f0.left_condition(), c0);
     EXPECT_EQ(f0.right_condition(), c1);
 
@@ -103,7 +103,7 @@ TEST(basic_filter, operators)
     ASSERT_TRUE(f0.left_is_filter());
     ASSERT_TRUE(f0.right_is_condition());
     EXPECT_FALSE(f0.right_is_filter());
-    EXPECT_EQ(f0.oper(), basic_filter::_or);
+    EXPECT_EQ(f0.oper(), sifter::operation::_or);
     EXPECT_EQ(f0.left_filter(), f00);
     EXPECT_EQ(f0.right_condition(), c2);
 
@@ -115,7 +115,7 @@ TEST(basic_filter, operators)
     ASSERT_TRUE(f0.left_is_filter());
     ASSERT_TRUE(f0.right_is_condition());
     EXPECT_FALSE(f0.right_is_filter());
-    EXPECT_EQ(f0.oper(), basic_filter::_and);
+    EXPECT_EQ(f0.oper(), sifter::operation::_and);
     EXPECT_EQ(f0.left_filter(), f00);
     EXPECT_EQ(f0.right_condition(), c3);
 
@@ -128,7 +128,7 @@ TEST(basic_filter, operators)
     EXPECT_FALSE(f11.left_is_filter());
     EXPECT_FALSE(f11.right_is_condition());
     EXPECT_FALSE(f11.right_is_filter());
-    EXPECT_EQ(f11.oper(), basic_filter::_none);
+    EXPECT_EQ(f11.oper(), sifter::operation::_none);
     EXPECT_EQ(f11.left_condition(), c0);
 
     f11 |= basic_filter();
@@ -136,7 +136,7 @@ TEST(basic_filter, operators)
     EXPECT_FALSE(f11.left_is_filter());
     EXPECT_FALSE(f11.right_is_condition());
     EXPECT_FALSE(f11.right_is_filter());
-    EXPECT_EQ(f11.oper(), basic_filter::_none);
+    EXPECT_EQ(f11.oper(), sifter::operation::_none);
     EXPECT_EQ(f11.left_condition(), c0);
 
     basic_filter f12(c1);
@@ -145,7 +145,7 @@ TEST(basic_filter, operators)
     EXPECT_FALSE(f11.left_is_filter());
     ASSERT_TRUE(f11.right_is_condition());
     EXPECT_FALSE(f11.right_is_filter());
-    EXPECT_EQ(f11.oper(), basic_filter::_and);
+    EXPECT_EQ(f11.oper(), sifter::operation::_and);
     EXPECT_EQ(f11.left_condition(), c0);
     EXPECT_EQ(f11.right_condition(), c1);
 
@@ -154,7 +154,7 @@ TEST(basic_filter, operators)
     EXPECT_FALSE(f11.left_is_filter());
     EXPECT_FALSE(f11.right_is_condition());
     EXPECT_FALSE(f11.right_is_filter());
-    EXPECT_EQ(f11.oper(), basic_filter::_none);
+    EXPECT_EQ(f11.oper(), sifter::operation::_none);
     EXPECT_EQ(f11.left_condition(), c0);
 
     f11 |= f12;
@@ -162,7 +162,7 @@ TEST(basic_filter, operators)
     EXPECT_FALSE(f11.left_is_filter());
     ASSERT_TRUE(f11.right_is_condition());
     EXPECT_FALSE(f11.right_is_filter());
-    EXPECT_EQ(f11.oper(), basic_filter::_or);
+    EXPECT_EQ(f11.oper(), sifter::operation::_or);
     EXPECT_EQ(f11.left_condition(), c0);
     EXPECT_EQ(f11.right_condition(), c1);
 
@@ -171,7 +171,7 @@ TEST(basic_filter, operators)
     EXPECT_FALSE(f13.left_is_filter());
     ASSERT_TRUE(f13.right_is_condition());
     EXPECT_FALSE(f13.right_is_filter());
-    EXPECT_EQ(f13.oper(), basic_filter::_and);
+    EXPECT_EQ(f13.oper(), sifter::operation::_and);
     EXPECT_EQ(f13.left_condition(), c0);
     EXPECT_EQ(f13.right_condition(), c1);
 
@@ -180,7 +180,7 @@ TEST(basic_filter, operators)
     EXPECT_FALSE(f14.left_is_filter());
     ASSERT_TRUE(f14.right_is_condition());
     EXPECT_FALSE(f14.right_is_filter());
-    EXPECT_EQ(f14.oper(), basic_filter::_or);
+    EXPECT_EQ(f14.oper(), sifter::operation::_or);
     EXPECT_EQ(f14.left_condition(), c0);
     EXPECT_EQ(f14.right_condition(), c1);
 
@@ -189,7 +189,7 @@ TEST(basic_filter, operators)
     EXPECT_FALSE(f15.left_is_filter());
     ASSERT_TRUE(f15.right_is_condition());
     EXPECT_FALSE(f15.right_is_filter());
-    EXPECT_EQ(f15.oper(), basic_filter::_and);
+    EXPECT_EQ(f15.oper(), sifter::operation::_and);
     EXPECT_EQ(f15.left_condition(), c0);
     EXPECT_EQ(f15.right_condition(), c1);
 
@@ -198,7 +198,7 @@ TEST(basic_filter, operators)
     EXPECT_FALSE(f16.left_is_filter());
     ASSERT_TRUE(f16.right_is_condition());
     EXPECT_FALSE(f16.right_is_filter());
-    EXPECT_EQ(f16.oper(), basic_filter::_or);
+    EXPECT_EQ(f16.oper(), sifter::operation::_or);
     EXPECT_EQ(f16.left_condition(), c0);
     EXPECT_EQ(f16.right_condition(), c1);
 
@@ -207,7 +207,7 @@ TEST(basic_filter, operators)
     ASSERT_TRUE(f17.left_is_filter());
     EXPECT_FALSE(f17.right_is_condition());
     ASSERT_TRUE(f17.right_is_filter());
-    EXPECT_EQ(f17.oper(), basic_filter::_and);
+    EXPECT_EQ(f17.oper(), sifter::operation::_and);
     EXPECT_EQ(f17.left_filter(), f15);
     EXPECT_EQ(f17.right_filter(), f16);
 
@@ -216,7 +216,7 @@ TEST(basic_filter, operators)
     ASSERT_TRUE(f18.left_is_filter());
     EXPECT_FALSE(f18.right_is_condition());
     ASSERT_TRUE(f18.right_is_filter());
-    EXPECT_EQ(f18.oper(), basic_filter::_or);
+    EXPECT_EQ(f18.oper(), sifter::operation::_or);
     EXPECT_EQ(f18.left_filter(), f15);
     EXPECT_EQ(f18.right_filter(), f16);
 
@@ -226,7 +226,7 @@ TEST(basic_filter, operators)
     ASSERT_TRUE(f19.left_is_filter());
     EXPECT_FALSE(f19.right_is_condition());
     ASSERT_TRUE(f19.right_is_filter());
-    EXPECT_EQ(f19.oper(), basic_filter::_and);
+    EXPECT_EQ(f19.oper(), sifter::operation::_and);
     EXPECT_EQ(f19.left_filter(), f15);
     EXPECT_EQ(f19.right_filter(), f16);
 
@@ -236,7 +236,7 @@ TEST(basic_filter, operators)
     ASSERT_TRUE(f19.left_is_filter());
     EXPECT_FALSE(f19.right_is_condition());
     ASSERT_TRUE(f19.right_is_filter());
-    EXPECT_EQ(f19.oper(), basic_filter::_or);
+    EXPECT_EQ(f19.oper(), sifter::operation::_or);
     EXPECT_EQ(f19.left_filter(), f15);
     EXPECT_EQ(f19.right_filter(), f16);
 }

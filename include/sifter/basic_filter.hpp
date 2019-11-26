@@ -28,6 +28,13 @@
 
 namespace sifter
 {
+    enum class operation
+    {
+        _none,
+        _and,
+        _or
+    };
+
     template<typename Comparison, Comparison def_value, typename... Types>
     class basic_filter;
 
@@ -148,13 +155,6 @@ namespace sifter
         using condition_type = basic_condition<Comparison, def_value, Types...>;
         using node_type = basic_node<Comparison, def_value, Types...>;
 
-        enum operation
-        {
-            _none,
-            _and,
-            _or
-        };
-
     public:
         basic_filter() = default;
 
@@ -198,6 +198,20 @@ namespace sifter
             return *this;
         }
 
+        basic_filter &operator=(const condition_type &c)
+        {
+            m_lhs = c;
+            m_rhs.reset();
+            m_operator = operation::_none;
+        }
+
+        basic_filter &operator=(condition_type &&c)
+        {
+            m_lhs = std::move(c);
+            m_rhs.reset();
+            m_operator = operation::_none;
+        }
+
         bool operator==(const basic_filter &f) const
         {
             return (
@@ -218,11 +232,11 @@ namespace sifter
 
         basic_filter &operator&=(const condition_type &rhs)
         {
-            if (m_operator != _none)
+            if (m_operator != operation::_none)
                 m_lhs = std::move(basic_filter(*this));
 
             m_rhs = rhs;
-            m_operator = _and;
+            m_operator = operation::_and;
             return *this;
         }
 
@@ -231,11 +245,11 @@ namespace sifter
             if (!rhs)
                 return *this;
 
-            if (m_operator != _none)
+            if (m_operator != operation::_none)
                 m_lhs = std::move(make_node(*this));
 
             m_rhs = std::move(make_node(rhs));
-            m_operator = _and;
+            m_operator = operation::_and;
             return *this;
         }
 
@@ -244,7 +258,7 @@ namespace sifter
             basic_filter out;
             out.m_lhs = std::move(make_node(*this));
             out.m_rhs = c;
-            out.m_operator = _and;
+            out.m_operator = operation::_and;
             return out;
         }
 
@@ -253,17 +267,17 @@ namespace sifter
             basic_filter out;
             out.m_lhs = std::move(make_node(*this));
             out.m_rhs = std::move(make_node(f));
-            out.m_operator = _and;
+            out.m_operator = operation::_and;
             return out;
         }
 
         basic_filter &operator|=(const condition_type &rhs)
         {
-            if (m_operator != _none)
+            if (m_operator != operation::_none)
                 m_lhs = std::move(make_node(*this));
 
             m_rhs = rhs;
-            m_operator = _or;
+            m_operator = operation::_or;
             return *this;
         }
 
@@ -272,11 +286,11 @@ namespace sifter
             if (!rhs)
                 return *this;
 
-            if (m_operator != _none)
+            if (m_operator != operation::_none)
                 m_lhs = std::move(make_node(*this));
 
             m_rhs = std::move(make_node(rhs));
-            m_operator = _or;
+            m_operator = operation::_or;
             return *this;
         }
 
@@ -285,7 +299,7 @@ namespace sifter
             basic_filter out;
             out.m_lhs = std::move(make_node(*this));
             out.m_rhs = c;
-            out.m_operator = _or;
+            out.m_operator = operation::_or;
             return out;
         }
 
@@ -294,7 +308,7 @@ namespace sifter
             basic_filter out;
             out.m_lhs = std::move(make_node(*this));
             out.m_rhs = std::move(make_node(f));
-            out.m_operator = _or;
+            out.m_operator = operation::_or;
             return out;
         }
 
@@ -371,7 +385,7 @@ namespace sifter
     private:
         node_type make_node(const basic_filter &f)
         {
-            if (f.oper() != _none)
+            if (f.oper() != operation::_none)
                 return node_type(f);
 
             if (f.left_is_filter())
@@ -383,7 +397,7 @@ namespace sifter
     private:
         node_type m_lhs;
         node_type m_rhs;
-        operation m_operator = _none;
+        operation m_operator = operation::_none;
     };
 
 
@@ -426,6 +440,12 @@ namespace sifter
         explicit basic_node(filter_type &&f)
                 : filter(new filter_type(std::move(f)))
         {
+        }
+
+        void reset()
+        {
+            filter.reset(nullptr);
+            condition.reset(nullptr);
         }
 
         basic_node &operator=(const basic_node &n)

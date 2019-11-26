@@ -40,12 +40,15 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
         ${CMAKE_CURRENT_BINARY_DIR}/googletest-build
         EXCLUDE_FROM_ALL)
 
-if (CMAKE_VERSION VERSION_LESS 2.8.11)
-    include_directories("${gtest_SOURCE_DIR}/include")
-endif()
 
-
-add_executable(${PROJECT_NAME} condition_test.cpp node_test.cpp ../include/sifter/filter.hpp filter_test.cpp)
+add_executable(${PROJECT_NAME}
+        ../include/sifter/basic_filter.hpp
+        ../include/sifter/filter.hpp
+        ../include/sifter/ostream.hpp
+        condition_test.cpp
+        node_test.cpp
+        filter_test.cpp
+        out_test.cpp)
 target_link_libraries(${PROJECT_NAME} gtest gtest_main)
 
 include(CTest)
