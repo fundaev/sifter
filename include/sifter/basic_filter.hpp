@@ -28,12 +28,15 @@
 
 namespace sifter
 {
+    template<typename Comparison, Comparison def_value, typename... Types>
+    class basic_filter;
 
     template<typename Comparison, Comparison def_value, typename... Types>
     class basic_condition
     {
     public:
         using value_type = std::variant<Types...>;
+        using filter_type = basic_filter<Comparison, def_value, Types...>;
 
     public:
         explicit basic_condition(const value_type &lhs = value_type(),
@@ -107,6 +110,26 @@ namespace sifter
             m_rhs = c.m_rhs;
             m_operator = c.m_operator;
             return *this;
+        }
+
+        filter_type operator&&(const basic_condition &c) const
+        {
+            return (filter_type(*this) && c);
+        }
+
+        filter_type operator&&(const filter_type &f) const
+        {
+            return (filter_type(*this) && f);
+        }
+
+        filter_type operator||(const basic_condition &c) const
+        {
+            return (filter_type(*this) || c);
+        }
+
+        filter_type operator||(const filter_type &f) const
+        {
+            return (filter_type(*this) || f);
         }
 
     private:

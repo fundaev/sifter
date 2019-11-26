@@ -142,3 +142,94 @@ TEST(condition, operators)
     EXPECT_FALSE(c0 == c);
     EXPECT_TRUE(c0 != c);
 }
+
+TEST(basic_condition, transformation)
+{
+    using condition =
+      sifter::basic_condition<sifter::comparison, sifter::eq, int, std::string>;
+    using filter =
+         sifter::basic_filter<sifter::comparison, sifter::eq, int, std::string>;
+
+    condition c0("a", 3);
+    condition c1("b", -15, sifter::ge);
+
+    filter f0 = c0 && c1;
+    ASSERT_TRUE(f0.left_is_condition());
+    EXPECT_FALSE(f0.left_is_filter());
+    ASSERT_TRUE(f0.right_is_condition());
+    EXPECT_FALSE(f0.right_is_filter());
+    EXPECT_EQ(f0.left_condition(), c0);
+    EXPECT_EQ(f0.right_condition(), c1);
+    EXPECT_EQ(f0.oper(), filter::_and);
+
+    filter f1 = c0 || c1;
+    ASSERT_TRUE(f1.left_is_condition());
+    EXPECT_FALSE(f1.left_is_filter());
+    ASSERT_TRUE(f1.right_is_condition());
+    EXPECT_FALSE(f1.right_is_filter());
+    EXPECT_EQ(f1.left_condition(), c0);
+    EXPECT_EQ(f1.right_condition(), c1);
+    EXPECT_EQ(f1.oper(), filter::_or);
+
+    filter f2 = c0 && f1;
+    ASSERT_TRUE(f2.left_is_condition());
+    EXPECT_FALSE(f2.left_is_filter());
+    EXPECT_FALSE(f2.right_is_condition());
+    ASSERT_TRUE(f2.right_is_filter());
+    EXPECT_EQ(f2.left_condition(), c0);
+    EXPECT_EQ(f2.right_filter(), f1);
+    EXPECT_EQ(f2.oper(), filter::_and);
+
+    filter f3 = c0 || f2;
+    ASSERT_TRUE(f3.left_is_condition());
+    EXPECT_FALSE(f3.left_is_filter());
+    EXPECT_FALSE(f3.right_is_condition());
+    ASSERT_TRUE(f3.right_is_filter());
+    EXPECT_EQ(f3.left_condition(), c0);
+    EXPECT_EQ(f3.right_filter(), f2);
+    EXPECT_EQ(f3.oper(), filter::_or);
+}
+
+TEST(condition, transformation)
+{
+    using condition = sifter::condition<int, std::string>;
+    using filter = sifter::filter<int, std::string>;
+
+    filter f0 = condition("a") == 3 && condition("b") >= -15;
+    ASSERT_TRUE(f0.left_is_condition());
+    EXPECT_FALSE(f0.left_is_filter());
+    ASSERT_TRUE(f0.right_is_condition());
+    EXPECT_FALSE(f0.right_is_filter());
+    EXPECT_EQ(f0.left_condition(), condition("a", 3));
+    EXPECT_EQ(f0.right_condition(), condition("b", -15, sifter::ge));
+    EXPECT_EQ(f0.oper(), filter::_and);
+
+    filter f1 = condition("a") == 3 || condition("b") >= -15;
+    ASSERT_TRUE(f1.left_is_condition());
+    EXPECT_FALSE(f1.left_is_filter());
+    ASSERT_TRUE(f1.right_is_condition());
+    EXPECT_FALSE(f1.right_is_filter());
+    EXPECT_EQ(f1.left_condition(), condition("a", 3));
+    EXPECT_EQ(f1.right_condition(), condition("b", -15, sifter::ge));
+    EXPECT_EQ(f1.oper(), filter::_or);
+
+    filter f2 = condition("a") == 3 && f1;
+    ASSERT_TRUE(f2.left_is_condition());
+    EXPECT_FALSE(f2.left_is_filter());
+    EXPECT_FALSE(f2.right_is_condition());
+    ASSERT_TRUE(f2.right_is_filter());
+    EXPECT_EQ(f2.left_condition(), condition("a", 3));
+    EXPECT_EQ(f2.right_filter(), f1);
+    EXPECT_EQ(f2.oper(), filter::_and);
+
+    filter f3 = condition("a") == 3 || condition("a") == 3 &&
+                                       (condition("a") == 3 ||
+                                        condition("b") >= -15);
+    ASSERT_TRUE(f3.left_is_condition());
+    EXPECT_FALSE(f3.left_is_filter());
+    EXPECT_FALSE(f3.right_is_condition());
+    ASSERT_TRUE(f3.right_is_filter());
+    EXPECT_EQ(f3.left_condition(), condition("a", 3));
+    EXPECT_EQ(f3.right_filter(), f2);
+    EXPECT_EQ(f3.oper(), filter::_or);
+}

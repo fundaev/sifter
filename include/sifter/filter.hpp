@@ -133,8 +133,6 @@ namespace sifter
 
     template<typename... Types>
     using filter = basic_filter<comparison, eq, Types...>;
-    template<typename... Types>
-    using node = basic_node<comparison, eq, Types...>;
 }
 
 #endif //SIFTER_FILTER_HPP
