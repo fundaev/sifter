@@ -18,11 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-cmake_minimum_required(VERSION 3.14)
-project(sifter)
+project(sifter_example_sql)
 
-set(CMAKE_CXX_STANDARD 17)
-
-include_directories(include)
-add_subdirectory(test)
-add_subdirectory(examples)
+add_executable(${PROJECT_NAME} main.cpp)
