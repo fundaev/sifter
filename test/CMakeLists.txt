@@ -51,5 +51,8 @@ add_executable(${PROJECT_NAME}
         out_test.cpp)
 target_link_libraries(${PROJECT_NAME} gtest gtest_main)
 
-include(CTest)
-add_test(NAME sifter_test COMMAND sifter_test)
+add_test(NAME basic_condition COMMAND sifter_test --gtest_filter=basic_condition.*)
+add_test(NAME condition COMMAND sifter_test --gtest_filter=condition.*)
+add_test(NAME node COMMAND sifter_test --gtest_filter=node.*)
+add_test(NAME basic_filter COMMAND sifter_test --gtest_filter=basic_filter.*)
+add_test(NAME out COMMAND sifter_test --gtest_filter=out.*)

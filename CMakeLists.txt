@@ -18,11 +18,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.9)
 project(sifter)
+
+include(CTest)
 
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories(include)
-add_subdirectory(test)
-add_subdirectory(examples)
+
+if (BUILD_TESTING)
+    add_subdirectory(test)
+endif()
+
+set(BUILD_EXAMPLES ON CACHE BOOL BUILD_EXAMPLES)
+if (BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
+install(DIRECTORY include/sifter DESTINATION include FILES_MATCHING PATTERN "*.hpp")
