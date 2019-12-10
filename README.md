@@ -28,3 +28,40 @@ Library provides also `sifter::comparison` comparison type and `sifter::conditio
 Filter is tree. It's left and right nodes are conditions or other filters. Filter contains also logic operator (AND or OR) of `sifter::operation` type.
 
 Filter is represented by `sifter::basic_filter` variadic template. It has the same parameters as `sifter::basic_condition` template. Filter, specialized by `sifter::comparison` type, is represented by `sifter::filter` type.
+
+# Example
+```C++
+#include <sifter/filter.hpp>
+...
+
+enum field
+{
+    id,
+    name,
+    age
+};
+
+using condition = sifter::condition<field, int, std::string>;
+using filter = sifter::filter<field, int, std::string>;
+
+...
+
+filter f = condition(id) < 10 && (condition(name) % "John%" || condition(age) == 20);
+std::vector<entity> entities = repository.get(f);
+```
+# Installation
+```bash
+mkdir build
+cd build
+cmake ..
+make
+make test
+sudo make install
+```
+
+If you would like to avoid testing and building of examples you can run cmake with these arguments:
+```
+...
+cmake -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF ..
+...
+```
