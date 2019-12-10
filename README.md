@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/fundaev/sifter.svg?token=nnpi8UFeGgGq9v43yxVB&branch=master)](https://travis-ci.com/fundaev/sifter)
+
 # Sifter
 Sifter is lightweight C++ headers-only library, providing container for filter.
 
