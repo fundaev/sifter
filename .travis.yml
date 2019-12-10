@@ -6,7 +6,6 @@ compiler:
   - clang
 
 env:
-  - TARGET_CPU=x86
   - TARGET_CPU=amd64
 
 script:
