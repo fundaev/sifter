@@ -92,10 +92,17 @@ namespace sql
     bind(query &q, const condition::value_type &v, const std::string &prefix)
     {
         const std::string placeholder = ":" + prefix + "v";
+#ifdef SIFTER_USE_BOOST_VARIANT
+        if (boost::variant2::holds_alternative<int>(v))
+            q.bind(placeholder, boost::variant2::get<int>(v));
+        else if (boost::variant2::holds_alternative<std::string>(v))
+            q.bind(placeholder, boost::variant2::get<std::string>(v));
+#else
         if (std::holds_alternative<int>(v))
             q.bind(placeholder, std::get<int>(v));
         else if (std::holds_alternative<std::string>(v))
             q.bind(placeholder, std::get<std::string>(v));
+#endif
     }
 
     void
@@ -168,12 +175,19 @@ namespace sql
     std::string dump(const condition::value_type &v, const std::string &prefix,
                      const fieldmap &sql_fields)
     {
+#ifdef SIFTER_USE_BOOST_VARIANT
+        if (boost::variant2::holds_alternative<field>(v))
+        {
+            const auto p = sql_fields.find(boost::variant2::get<field>(v));
+            return p->second;
+        }
+#else
         if (std::holds_alternative<field>(v))
         {
             const auto p = sql_fields.find(std::get<field>(v));
             return p->second;
         }
-
+#endif
         return ":" + prefix + "v";
     }
 

@@ -72,11 +72,19 @@ namespace sifter
     private:
         static void dump(const condition_type &c, Dumper &dumper)
         {
+#ifdef SIFTER_USE_BOOST_VARIANT
+            dumper(special::condition_begin);
+            boost::variant2::visit(dumper, c.lhs());
+            dumper(c.comp());
+            boost::variant2::visit(dumper, c.rhs());
+            dumper(special::condition_end);
+#else
             dumper(special::condition_begin);
             std::visit(dumper, c.lhs());
             dumper(c.comp());
             std::visit(dumper, c.rhs());
             dumper(special::condition_end);
+#endif
         }
 
         static void dump(const filter_type &f, Dumper &dumper)
