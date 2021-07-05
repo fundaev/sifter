@@ -23,7 +23,15 @@ project(sifter)
 
 include(CTest)
 
-set(CMAKE_CXX_STANDARD 17)
+set(SIFTER_USE_BOOST_VARIANT OFF CACHE BOOL "Use boost::variant instead of std::variant")
+
+if (${SIFTER_USE_BOOST_VARIANT})
+    set(CMAKE_CXX_STANDARD 11)
+    add_definitions(-DSIFTER_USE_BOOST_VARIANT)
+    message("boost::variant2 is used instead of std::variant")
+else()
+    set(CMAKE_CXX_STANDARD 17)
+endif()
 
 include_directories(include)
 

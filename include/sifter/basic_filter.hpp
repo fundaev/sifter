@@ -23,11 +23,47 @@
 #ifndef SIFTER_BASIC_FILTER_HPP
 #define SIFTER_BASIC_FILTER_HPP
 
+#ifdef SIFTER_USE_BOOST_VARIANT
+#include <boost/variant2/variant.hpp>
+#else
 #include <variant>
+#endif
 #include <memory>
 
 namespace sifter
 {
+#ifdef SIFTER_USE_BOOST_VARIANT
+    template <typename... T>
+    using variant = boost::variant2::variant<T...>;
+
+    template <typename T, typename... V>
+    constexpr T& get(const variant<V...> &v)
+    {
+        return boost::variant2::get<T>(v);
+    }
+
+    template <typename T, typename... V>
+    constexpr T& get(variant<V...> &v)
+    {
+        return boost::variant2::get<T>(v);
+    }
+#else
+    template <typename... T>
+    using variant = std::variant<T...>;
+
+    template <typename T, typename... V>
+    constexpr T& get(const variant<V...> &v)
+    {
+        return std::get<T>(v);
+    }
+
+    template <typename T, typename... V>
+    constexpr T& get(variant<V...> &v)
+    {
+        return std::get<T>(v);
+    }
+#endif
+
     enum class operation
     {
         _none,
@@ -42,7 +78,11 @@ namespace sifter
     class basic_condition
     {
     public:
+#ifdef SIFTER_USE_BOOST_VARIANT
+    using value_type = variant<Types...>;
+#else
         using value_type = std::variant<Types...>;
+#endif
         using filter_type = basic_filter<Comparison, def_value, Types...>;
 
     public:
