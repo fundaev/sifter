@@ -27,6 +27,8 @@ add_library(${PROJECT_NAME}
         ${CMAKE_SOURCE_DIR}/include/sifter/filter.hpp)
 
 install(TARGETS ${PROJECT_NAME}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-install(DIRECTORY include/sifter DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} FILES_MATCHING PATTERN "*.hpp")
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+install(DIRECTORY include/sifter
+        DESTINATION include
+        FILES_MATCHING PATTERN "*.hpp")
