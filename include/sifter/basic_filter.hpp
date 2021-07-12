@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Sergei Fundaev
+ * Copyright (c) 2021 Sergei Fundaev
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -550,7 +550,7 @@ namespace sifter
             return !(*this == n);
         }
 
-        operator bool() const
+        explicit operator bool() const
         {
             return (static_cast<bool>(condition) || static_cast<bool>(filter));
         }

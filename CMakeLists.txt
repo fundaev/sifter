@@ -1,4 +1,4 @@
-# Copyright (c) 2019 Sergei Fundaev
+# Copyright (c) 2021 Sergei Fundaev
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,7 @@ else()
 endif()
 
 include_directories(include)
+add_subdirectory(src)
 
 if (BUILD_TESTING)
     add_subdirectory(test)
@@ -43,5 +44,3 @@ set(BUILD_EXAMPLES ON CACHE BOOL BUILD_EXAMPLES)
 if (BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
-
-install(DIRECTORY include/sifter DESTINATION include FILES_MATCHING PATTERN "*.hpp")

@@ -1,4 +1,4 @@
-# Copyright (c) 2019 Sergei Fundaev
+# Copyright (c) 2021 Sergei Fundaev
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -49,7 +49,7 @@ add_executable(${PROJECT_NAME}
         node_test.cpp
         filter_test.cpp
         out_test.cpp)
-target_link_libraries(${PROJECT_NAME} gtest gtest_main)
+target_link_libraries(${PROJECT_NAME} gtest gtest_main sifter)
 
 add_test(NAME basic_condition COMMAND sifter_test --gtest_filter=basic_condition.*)
 add_test(NAME condition COMMAND sifter_test --gtest_filter=condition.*)

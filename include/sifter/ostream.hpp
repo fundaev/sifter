@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Sergei Fundaev
+ * Copyright (c) 2021 Sergei Fundaev
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -127,10 +127,7 @@ namespace sifter
     class default_dumper
     {
     public:
-        explicit default_dumper(std::ostream &out)
-            : m_out(out)
-        {
-        }
+        explicit default_dumper(std::ostream &out);
 
         template <typename T>
         void operator()(const T &value)
@@ -143,66 +140,13 @@ namespace sifter
     };
 
     template<>
-    void default_dumper::operator()(const special &value)
-    {
-        switch (value)
-        {
-            case special::filter_begin:
-                m_out << '(';
-                break;
-            case special::filter_end:
-                m_out << ')';
-                break;
-            case special::condition_begin:
-            case special::condition_end:
-                break;
-        }
-    }
+    void default_dumper::operator()(const special &value);
 
     template<>
-    void default_dumper::operator()(const operation &value)
-    {
-        switch (value)
-        {
-            case operation::_none:
-                break;
-            case operation::_and:
-                m_out << "&&";
-                break;
-            case operation::_or:
-                m_out << "||";
-                break;
-        }
-    }
+    void default_dumper::operator()(const operation &value);
 
     template<>
-    void default_dumper::operator()(const comparison &value)
-    {
-        switch (value)
-        {
-            case eq:
-                m_out << "==";
-                break;
-            case ne:
-                m_out << "!=";
-                break;
-            case lt:
-                m_out << '<';
-                break;
-            case le:
-                m_out << "<=";
-                break;
-            case gt:
-                m_out << '>';
-                break;
-            case ge:
-                m_out << ">=";
-                break;
-            case like:
-                m_out << '~';
-                break;
-        }
-    }
+    void default_dumper::operator()(const comparison &value);
 }
 
 #endif //SIFTER_OSTREAM_HPP

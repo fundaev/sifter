@@ -18,7 +18,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-project(sifter_example_sql)
+project(sifter)
 
-add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries(${PROJECT_NAME} sifter)
+add_library(${PROJECT_NAME}
+        ${CMAKE_CURRENT_SOURCE_DIR}/ostream.cpp
+        ${CMAKE_SOURCE_DIR}/include/sifter/ostream.hpp
+        ${CMAKE_SOURCE_DIR}/include/sifter/basic_filter.hpp
+        ${CMAKE_SOURCE_DIR}/include/sifter/filter.hpp)
+
+install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(DIRECTORY include/sifter DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} FILES_MATCHING PATTERN "*.hpp")
