@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.com/fundaev/sifter.svg?token=nnpi8UFeGgGq9v43yxVB&branch=master)](https://travis-ci.com/fundaev/sifter)
 
 # Sifter
-Sifter is lightweight C++ headers-only library, providing container for filter.
+Sifter is the lightweight C++ library, providing container for a filter.
 
 # Motivation
 Let's imagine there is some repository-object. It allows to select the list of entities in according to some filter - set of conditions, joined by AND or OR operators. Number of conditions in this filter may vary: filter may be empty, may contain a single condition or several ones.
@@ -11,7 +11,7 @@ There is also something, which uses this repository. For example, it may be some
 Sifter provides a possible solution for this task.
 
 # Requirements
-* C++17
+* C++17 or C++11 plus Boost v1.71 or later
 
 # Terminology
 Sifter provides two kinds of objects: condition and filter.
