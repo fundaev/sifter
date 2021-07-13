@@ -21,6 +21,8 @@
 env:
   - TARGET_CPU=amd64
 
+language: c++
+
 jobs:
   include:
     - name: "Ubuntu 20.04; gcc"
