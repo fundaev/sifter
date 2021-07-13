@@ -37,6 +37,8 @@ jobs:
     - name: "Ubuntu 20.04; gcc; boost::variant"
       dist: focal
       compiler: gcc
+      before_install:
+        - sudo apt-get -y install libboost-all-dev
       script:
         - mkdir build
         - cd build
