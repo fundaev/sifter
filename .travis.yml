@@ -75,8 +75,8 @@ jobs:
     - name: "FreeBSD; gcc; boost::variant"
       os: freebsd
       compiler: gcc
-      pkg:
-        - boost-all
+      before_install:
+        - su -m root -c 'pkg install -y boost-all'
       script:
         - mkdir build
         - cd build
@@ -95,8 +95,8 @@ jobs:
     - name: "FreeBSD; clang; boost::variant"
       os: freebsd
       compiler: clang
-      pkg:
-        - boost-all
+      before_install:
+        - su -m root -c 'pkg install -y boost-all'
       script:
         - mkdir build
         - cd build
