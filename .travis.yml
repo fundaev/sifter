@@ -75,7 +75,8 @@ jobs:
     - name: "FreeBSD; gcc; boost::variant"
       os: freebsd
       compiler: gcc
-      pkg: boost-all
+      pkg:
+        - boost-all
       script:
         - mkdir build
         - cd build
@@ -94,7 +95,8 @@ jobs:
     - name: "FreeBSD; clang; boost::variant"
       os: freebsd
       compiler: clang
-      pkg: boost-all
+      pkg:
+        - boost-all
       script:
         - mkdir build
         - cd build
