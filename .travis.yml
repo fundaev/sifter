@@ -79,7 +79,7 @@ jobs:
       script:
         - mkdir build
         - cd build
-        - cmake ..
+        - cmake -DSIFTER_USE_BOOST_VARIANT=ON ..
         - cmake --build .
         - ctest --output-on-failure
     - name: "FreeBSD; clang"
@@ -98,6 +98,6 @@ jobs:
       script:
         - mkdir build
         - cd build
-        - cmake ..
+        - cmake -DSIFTER_USE_BOOST_VARIANT=ON ..
         - cmake --build .
         - ctest --output-on-failure
