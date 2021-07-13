@@ -100,6 +100,7 @@ jobs:
       before_install:
         - su -m root -c 'pkg install -y boost-all'
       script:
+        - ls -la /usr/local/include/boost
         - mkdir build
         - cd build
         - cmake -DSIFTER_USE_BOOST_VARIANT=ON ..
