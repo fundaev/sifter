@@ -1,4 +1,9 @@
-dist: bionic
+dist:
+  - focal
+  - bionic
+  - xenial
+  - freebsd
+
 language: C++
 
 compiler:
