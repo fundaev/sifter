@@ -24,7 +24,7 @@ env:
 jobs:
   include:
     - name: "Ubuntu 20.04; gcc"
-      os: focal
+      dist: focal
       compiler: gcc
       script:
         - mkdir build
@@ -35,7 +35,7 @@ jobs:
     # There is no job "Ubuntu 20.04; clang" because of the bug in clang
     # https://stackoverflow.com/questions/46506387/getstring-for-variants-fail-under-clang-but-not-g
     - name: "Ubuntu 20.04; gcc; boost::variant"
-      os: focal
+      dist: focal
       compiler: gcc
       script:
         - mkdir build
@@ -44,7 +44,7 @@ jobs:
         - cmake --build .
         - ctest --output-on-failure
     - name: "Ubuntu 18.04; gcc"
-      os: bionic
+      dist: bionic
       compiler: gcc
       script:
         - mkdir build
@@ -53,7 +53,7 @@ jobs:
         - cmake --build .
         - ctest --output-on-failure
     - name: "Ubuntu 18.04; clang"
-      os: bionic
+      dist: bionic
       compiler: clang
       script:
         - mkdir build
