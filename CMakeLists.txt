@@ -26,6 +26,7 @@ include(CTest)
 set(SIFTER_USE_BOOST_VARIANT OFF CACHE BOOL "Use boost::variant instead of std::variant")
 
 if (${SIFTER_USE_BOOST_VARIANT})
+    find_package(Boost 1.71)
     set(CMAKE_CXX_STANDARD 11)
     add_definitions(-DSIFTER_USE_BOOST_VARIANT)
     message("boost::variant2 is used instead of std::variant")
